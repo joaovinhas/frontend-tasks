@@ -11,7 +11,7 @@
             <router-link to="/" class="nav-link active" aria-current="page">Home</router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+            <input v-model="token" type="text"><button @click="logout()" type="button">logout</button>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -42,9 +42,42 @@
 
 <script>
 
+  import Axios from '@/api/api.js';
+
   export default {
     name: 'NavbarComponent',
+    data() {
+      return {
+        username: "",
+        token: "",
+      }
+    },
     components: {
+    },
+    created(){
+
+      if(localStorage.token){
+        this.token = localStorage.token
+      }
+      if(sessionStorage.token){
+        this.token = sessionStorage.token
+      }
+
+      if(this.token != ""){
+        console.log("TESTE")
+      }
+
+    },
+    methods: {
+
+      logout(){
+
+        var response = Axios.logout(this.token)
+
+        console.log(response)
+
+      }
+
     }
   }
 

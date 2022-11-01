@@ -35,7 +35,7 @@
             </div>
           </div>
 
-          <button @click="register()" class="btn btn-primary">Cadastrar</button>
+          <button type="button" @click="register()" class="btn btn-primary">Cadastrar</button>
 
           <span>Já possui cadastro, logue <router-link to="/login">Aqui!</router-link></span>
 
@@ -72,9 +72,26 @@
     methods: {
       register(){
 
-        var response = Axios.register(this.username, this.email, this.password, this.confirm_password)
+        if(this.username != "" && this.email != "" && this.password != "" && this.confirm_password  != ""){
 
-        console.log(response)
+          if(this.password == this.confirm_password){
+
+            var response = Axios.register(this.username, this.email, this.password, this.confirm_password)
+
+            if(response.success){
+              console.log(response.success)
+            }
+          
+          }else{
+
+            console.log("Senhas diferentes")
+
+          }
+        }else{
+
+          console.log("Preencha os campos")
+
+        }
 
       }
     }

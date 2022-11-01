@@ -10,25 +10,25 @@
           <div class="mb-3 row">
             <label class="col-sm-1 col-form-label">Email</label>
             <div class="col-sm-11">
-              <input type="email" class="form-control" placeholder="Digite seu email aqui!">
+              <input v-model="email" type="email" class="form-control" placeholder="Digite seu email aqui!">
             </div>
           </div>
 
           <div class="mb-3 row">
             <label class="col-sm-1 col-form-label">Senha</label>
             <div class="col-sm-11">
-              <input type="password" class="form-control" placeholder="Digite sua senha aqui!">
+              <input v-model="password" type="password" class="form-control" placeholder="Digite sua senha aqui!">
             </div>
           </div>
 
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+            <input v-model="logged" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
             <label class="form-check-label" for="flexCheckDefault">
               Manter logado
             </label>
           </div><br/>
 
-          <button class="btn btn-primary">Logar</button>
+          <button @click="login()" type="button" class="btn btn-primary">Logar</button>
 
           <span>Não possui cadastro, crie seu cadastro <router-link to="/register">Aqui!</router-link></span>
 
@@ -42,12 +42,69 @@
 
 <script>
   
+  import Axios from '@/api/api.js';
   import Navbar from '@/components/NavbarComponent.vue'
 
   export default {
     name: 'LoginView',
     components: {
       Navbar,
+    },
+    data() {
+      return {
+        username: "",
+        email:"",
+        password:"",
+        token: "",
+        logged:false,
+        notification: false,
+      }
+    },
+    methods: {
+
+      login(){
+
+        if(this.email == "" && this.password == ""){
+          console.log("Preencha os campos")
+        }else{
+
+          var response = Axios.login(this.email, this.password)
+
+          console.log(response)
+
+          if(response.email != ""){
+
+            if(this.logged){
+
+              localStorage.username = response.username
+              localStorage.email = response.email
+              localStorage.status = response.status
+              localStorage.permission = response.permission
+              localStorage.token = response.token_type
+              localStorage.logged = this.logged
+
+            }else{
+
+              sessionStorage.username = response.username
+              sessionStorage.email = response.email
+              sessionStorage.status = response.status
+              sessionStorage.permission = response.permission
+              sessionStorage.token = response.token_type
+
+            }
+
+            this.$router.push("/dashboard")
+
+          }else{
+
+            console.log("Erro ao logar")
+
+          }
+
+        }
+
+      }
+
     }
   }
 

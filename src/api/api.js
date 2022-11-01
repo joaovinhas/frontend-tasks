@@ -8,15 +8,23 @@ class Axios{
 
 	register(name, email, password, confirm_password){
 
-		var promise = axios.post(url + '/register', {name: name, email: email, password: password, confirm_password: confirm_password}).then(response => { return response.data });
+		var promise = axios.post(url + '/register', {name: name, email: email, password: password, password_confirmation: confirm_password}).then(response => { return response.data });
 
 		return promise;
 
 	}
 
-	login(){
+	login(email, password){
 
-		var promise = axios.post(url + '/login').then(response => { return response.data });
+		var promise = axios.post(url + '/login', {email: email, password: password}).then(response => { return response.data });
+
+		return promise;
+
+	}
+
+	logout(token){
+
+		var promise = axios.post(url + '/logout', { headers: {"Authorization" : `Bearer ${token}`} } ).then(response => { return response.data });
 
 		return promise;
 
