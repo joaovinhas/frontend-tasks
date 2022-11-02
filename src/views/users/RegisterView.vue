@@ -8,28 +8,28 @@
         <h2>Crie sua conta aqui!</h2>
 
           <div class="mb-3 row">
-            <label class="col-sm-2 col-form-label">Name</label>
+            <label class="col-auto col-form-label">Name</label>
             <div class="col-sm-10">
               <input v-model="username" type="text" class="form-control" placeholder="Digite seu nome aqui!" required="required">
             </div>
           </div>
 
           <div class="mb-3 row">
-            <label class="col-sm-2 col-form-label">Email</label>
+            <label class="col-auto col-form-label">Email</label>
             <div class="col-sm-10">
               <input v-model="email" type="email" class="form-control" placeholder="Digite seu email aqui!" required="required">
             </div>
           </div>
 
           <div class="mb-3 row">
-            <label class="col-sm-2 col-form-label">Senha</label>
+            <label class="col-auto col-form-label">Senha</label>
             <div class="col-sm-10">
               <input v-model="password" type="password" class="form-control" placeholder="Digite uma senha aqui!" required="required">
             </div>
           </div>
 
           <div class="mb-3 row">
-            <label class="col-sm-2 col-form-label">Confirmar Senha</label>
+            <label class="col-auto col-form-label">Confirmar Senha</label>
             <div class="col-sm-10">
               <input v-model="confirm_password" type="password" class="form-control" placeholder="Confirme sua senha aqui!" required="required">
             </div>

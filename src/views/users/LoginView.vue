@@ -62,13 +62,13 @@
     },
     methods: {
 
-      login(){
+      async login(){
 
         if(this.email == "" && this.password == ""){
           console.log("Preencha os campos")
         }else{
 
-          var response = Axios.login(this.email, this.password)
+          var response = await Axios.login(this.email, this.password)
 
           console.log(response)
 
@@ -76,11 +76,13 @@
 
             if(this.logged){
 
+              console.log(response.email)
+
               localStorage.username = response.username
               localStorage.email = response.email
               localStorage.status = response.status
               localStorage.permission = response.permission
-              localStorage.token = response.token_type
+              localStorage.token = response.access_token
               localStorage.logged = this.logged
 
             }else{
@@ -89,7 +91,7 @@
               sessionStorage.email = response.email
               sessionStorage.status = response.status
               sessionStorage.permission = response.permission
-              sessionStorage.token = response.token_type
+              sessionStorage.token = response.access_token
 
             }
 

@@ -5,14 +5,12 @@
 </template>
 
 <script>
-  
-</script>
-  
   export default {
     name: 'FooterComponent',
     components: {
     }
   }
+</script>
 
 <style lang="scss" scoped>
 

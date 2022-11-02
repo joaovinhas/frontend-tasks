@@ -24,31 +24,39 @@ class Axios{
 
 	logout(token){
 
-		var promise = axios.post(url + '/logout', { headers: {"Authorization" : `Bearer ${token}`} } ).then(response => { return response.data });
+		var promise = axios.get(url + '/logout', { headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
 
 		return promise;
 
 	}
 
-	show_user(){
+	dashboard(token){
 
-		var promise = axios.post(url + '/show_user').then(response => { return response.data });
-
-		return promise;
-
-	}
-
-	show_users(){
-
-		var promise = axios.get(url + '/show_users').then(response => { return response.data });
+		var promise = axios.get(url + '/dashboard', { headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
 
 		return promise;
 
 	}
 
-	edit_user(){
+	show_user(token){
 
-		var promise = axios.post(url + '/edit_user').then(response => { return response.data });
+		var promise = axios.get(url + '/show_user', { headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
+
+		return promise;
+
+	}
+
+	show_users(token){
+
+		var promise = axios.get(url + '/show_users', { headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
+
+		return promise;
+
+	}
+
+	async edit_user(token){
+
+		var promise = await axios.post(url + '/edit_user', { headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
 
 		return promise;
 
@@ -80,9 +88,9 @@ class Axios{
 
 //Tasks
 
-	create_task(){
+	create_task(token, new_task){
 
-		var promise = axios.post(url + '/create_task').then(response => { return response.data });
+		var promise = axios.post(url + '/create_task', { new_task: new_task}, {headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
 
 		return promise;
 
@@ -96,9 +104,9 @@ class Axios{
 
 	}
 
-	all_tasks(){
+	all_tasks(token){
 
-		var promise = axios.post(url + '/all_tasks').then(response => { return response.data });
+		var promise = axios.get(url + '/all_tasks', { headers: {"Authorization" : `Bearer ${token}`}}).then(response => { return response.data });
 
 		return promise;
 

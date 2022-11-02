@@ -2,17 +2,64 @@
   <div>
     <Navbar/>
     <main class="container">
-      <h1>Dashboard</h1>
+      <h1>Bem Vindo ao Tasks {{username}}</h1>
+      <p>Você possui {{tasks.length}} tasks, vejas suas tasks <router-link to="/tasks">aqui</router-link></p>
+      <div v-if="permission == 'admin'">
+        <p>Numero de usuarios no sistema: {{users.length}}, vejas os usuarios <router-link to="/all_users">aqui</router-link></p>
+      </div>
     </main>
   </div>
 </template>
 
 <script>
 
+import Axios from '@/api/api.js';
 import Navbar from '@/components/NavbarComponent.vue'
 
 export default {
   name: 'DashboardView',
+  data(){
+    return{
+      token:"",
+      username:"",
+      users: "",
+      tasks:"",
+    }
+  },
+  async created(){
+
+    if(localStorage.token || sessionStorage.token){
+      
+      var response
+
+      if(localStorage.token){
+        
+        this.token = localStorage.token
+        this.username = localStorage.username
+        this.permission = sessionStorage.permission
+
+      }else{
+        
+        this.token = sessionStorage.token
+        this.username = sessionStorage.username
+        this.permission = sessionStorage.permission
+
+      }
+
+      response = await Axios.dashboard(this.token)
+
+      if(this.permission == "admin"){
+        this.users = response.users
+        this.tasks = response.tasks
+      }else{
+        this.tasks = response.tasks
+      }
+      
+    }else{
+      this.$router.push('/login')
+    }
+
+  },
   components: {
     Navbar,
   }
