@@ -70,8 +70,6 @@
 
           var response = await Axios.login(this.email, this.password)
 
-          console.log(response)
-
           if(response.email != ""){
 
             if(this.logged){

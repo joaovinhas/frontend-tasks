@@ -1,29 +1,35 @@
 <template>
 
-  <li  v-for="(task, index) in all_tasks.root_tasks" :key="index"  class="list-group-item list-group-item-dark">
-    
-    {{task.task}}
+  <li :style="{'margin-left': `${depth * 30}px`}" class="list-group-item list-group-item-dark">
 
-    {{task.timer}}
-
-    {{task.concluded}}
+    {{node.task}}
 
   </li>
-  <br/>
-  <p>{{all_tasks}}</p>
-  
+  <ChildTasksComponent
+    v-for="child in node.children"
+    :key="child.task"
+    :node="child"
+    :depth="depth + 1"
+  />
+
 </template>
 
 <script>
+  
   export default {
     name: 'ChildTasksComponent',
     props:{
-      all_tasks: Object,
+      node: Object,
+      depth: {
+        type:Number,
+        default: 0,
+      }
     },
     components: {
-    
+
     },
-  }  
+  } 
+
 </script>
 
 <style lang="scss" scoped>

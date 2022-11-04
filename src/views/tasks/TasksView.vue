@@ -10,7 +10,13 @@
         </div>
       </div>
 
-      <ChildTasks :all_tasks="tasks"/>
+      <ChildTasks
+       v-for="(child, index) in c_tasks" :key="index"
+       :node="child"
+      />
+
+      <br/>
+      <p>{{c_tasks}}</p>
 
     </main>
   </div>
@@ -31,6 +37,7 @@
       return{
         token: "",
         tasks:"",
+        c_tasks:"",
         new_task: "",
       }
     },
@@ -55,7 +62,12 @@
         if(response.root_tasks == null){
           console.log("Nenhuma tasks encontrada!")
         }else{
+          
           this.tasks = response
+
+          this.childtasks()
+
+          this.c_tasks = this.tasks.root_tasks
         }
         
       }else{
@@ -74,7 +86,48 @@
           console.log("Erro ao criar a task!")
         }
 
-      }
+      },
+
+      childtasks(){
+
+        if(this.tasks.child_tasks.lenght != 0){
+
+          for(let i = 0; i < this.tasks.root_tasks.length; i++){
+
+            for(let x = 0; x < this.tasks.child_tasks.length; x++){
+
+              if(this.tasks.root_tasks[i].id == this.tasks.child_tasks[x].id_parent){
+
+                this.child_tasks(this.tasks.child_tasks[x], this.tasks.child_tasks)
+
+                this.tasks.root_tasks[i].children = Object.assign([this.tasks.child_tasks[x]])
+
+              }
+
+            }
+
+          }
+
+        }
+      },
+
+      child_tasks(root_tasks, child_tasks){
+
+        for(let i = 0; i < child_tasks.length; i++){
+
+          if(root_tasks.id == child_tasks[i].id_parent){
+
+            this.child_tasks(child_tasks[i], this.tasks.child_tasks)
+
+            root_tasks.children = Object.assign([child_tasks[i]])
+
+          }
+
+        }
+
+        return root_tasks
+      },
+
     }
   }
 

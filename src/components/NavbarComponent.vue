@@ -83,8 +83,6 @@
           this.username = ""
         }
       
-      }else{
-        this.$router.push('/login')
       }
 
     },
