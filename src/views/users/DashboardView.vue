@@ -29,8 +29,6 @@ export default {
   async created(){
 
     if(localStorage.token || sessionStorage.token){
-      
-      var response
 
       if(localStorage.token){
         
@@ -38,7 +36,7 @@ export default {
         this.username = localStorage.username
         this.permission = sessionStorage.permission
 
-      }else{
+      }else if(sessionStorage.token){
         
         this.token = sessionStorage.token
         this.username = sessionStorage.username
@@ -46,11 +44,15 @@ export default {
 
       }
 
-      response = await Axios.dashboard(this.token)
+      var response = await Axios.dashboard(this.token)
+
+      console.log(response)
 
       if(this.permission == "admin"){
         this.users = response.users
         this.tasks = response.tasks
+      }else if(this.permission == "bloqueado"){
+        console.log("Bloqueado")
       }else{
         this.tasks = response.tasks
       }

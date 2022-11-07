@@ -62,9 +62,9 @@ class Axios{
 
 	}
 
-	edit_permission(){
+	edit_permission(token, id_user, permission, status){
 
-		var promise = axios.post(url + '/edit_permission').then(response => { return response.data });
+		var promise = axios.post(url + '/edit_permission',  { id_user: id_user, permission: permission,  status: status }, {headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
 
 		return promise;
 
