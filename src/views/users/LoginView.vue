@@ -70,30 +70,26 @@
 
           var response = await Axios.login(this.email, this.password)
 
-          if(response.email != ""){
+          if(response.access_token){
 
             if(this.logged){
 
-              console.log(response.email)
-
               localStorage.username = response.username
-              localStorage.email = response.email
-              localStorage.status = response.status
-              localStorage.permission = response.permission
               localStorage.token = response.access_token
               localStorage.logged = this.logged
 
             }else{
 
               sessionStorage.username = response.username
-              sessionStorage.email = response.email
-              sessionStorage.status = response.status
-              sessionStorage.permission = response.permission
               sessionStorage.token = response.access_token
 
             }
 
             this.$router.push("/dashboard")
+
+          }else if(response.success){
+
+            console.log(response.success)
 
           }else{
 

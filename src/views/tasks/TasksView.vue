@@ -10,10 +10,15 @@
         </div>
       </div>
 
-      <ChildTasks
-       v-for="(child, index) in c_tasks" :key="index"
-       :node="child"
-      />
+      <div v-if="tasks.root_tasks">
+        <ChildTasks
+         v-for="(child, index) in c_tasks" :key="index"
+         :node="child"
+        />
+      </div>
+      <div v-else>
+        Nenhuma task encontrada!
+      </div>
 
       <br/>
       <p>{{c_tasks}}</p>
@@ -44,8 +49,6 @@
     async created(){
 
       if(localStorage.token || sessionStorage.token){
-        
-        var response
 
         if(localStorage.token){
           
@@ -57,17 +60,25 @@
 
         }
 
-        response = await Axios.all_tasks(this.token)
+        var check = await Axios.check_user(this.token)
 
-        if(response.root_tasks == null){
-          console.log("Nenhuma tasks encontrada!")
+        if(check.user.status != "block"){
+
+          var response = await Axios.all_tasks(this.token)
+
+          if(response.root_tasks == null){
+            console.log("Nenhuma tasks encontrada!")
+          }else{
+            
+            this.tasks = response
+
+            this.childtasks()
+
+            this.c_tasks = this.tasks.root_tasks
+          }
+
         }else{
-          
-          this.tasks = response
-
-          this.childtasks()
-
-          this.c_tasks = this.tasks.root_tasks
+          this.$router.push('/login')
         }
         
       }else{
@@ -100,7 +111,15 @@
 
                 this.child_tasks(this.tasks.child_tasks[x], this.tasks.child_tasks)
 
-                this.tasks.root_tasks[i].children = Object.assign([this.tasks.child_tasks[x]])
+                if(this.tasks.root_tasks[i].children){
+
+                  this.tasks.root_tasks[i].children.push(this.tasks.child_tasks[x])
+
+                }else{
+
+                  this.tasks.root_tasks[i].children = Object.assign([this.tasks.child_tasks[x]])
+                
+                }
 
               }
 

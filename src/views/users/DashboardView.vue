@@ -4,7 +4,7 @@
     <main class="container">
       <h1>Bem Vindo ao Tasks {{username}}</h1>
       <p>Você possui {{tasks.length}} tasks, vejas suas tasks <router-link to="/tasks">aqui</router-link></p>
-      <div v-if="permission == 'admin'">
+      <div v-if="users">
         <p>Numero de usuarios no sistema: {{users.length}}, vejas os usuarios <router-link to="/all_users">aqui</router-link></p>
       </div>
     </main>
@@ -34,27 +34,29 @@ export default {
         
         this.token = localStorage.token
         this.username = localStorage.username
-        this.permission = sessionStorage.permission
 
       }else if(sessionStorage.token){
         
         this.token = sessionStorage.token
         this.username = sessionStorage.username
-        this.permission = sessionStorage.permission
 
       }
 
-      var response = await Axios.dashboard(this.token)
+      var check = await Axios.check_user(this.token)
 
-      console.log(response)
+      if(check.user.status != "block"){
 
-      if(this.permission == "admin"){
-        this.users = response.users
-        this.tasks = response.tasks
-      }else if(this.permission == "bloqueado"){
-        console.log("Bloqueado")
+        var response = await Axios.dashboard(this.token)
+
+        if(response.users){
+          this.users = response.users
+          this.tasks = response.tasks
+        }else{
+          this.tasks = response.tasks
+        }
+
       }else{
-        this.tasks = response.tasks
+        this.$router.push('/login')
       }
       
     }else{

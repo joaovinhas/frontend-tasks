@@ -38,6 +38,14 @@ class Axios{
 
 	}
 
+	async check_user(token){
+
+		var promise = await axios.get(url + '/check_user', { headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
+
+		return promise;
+
+	}
+
 	show_user(token){
 
 		var promise = axios.get(url + '/show_user', { headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });

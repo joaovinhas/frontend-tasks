@@ -63,7 +63,9 @@
 
         }
 
-        if(this.permission == "admin"){
+        var check = await Axios.check_user(this.token)
+
+        if(check.user.permission == "admin"){
 
           var response = await Axios.show_users(this.token)
 

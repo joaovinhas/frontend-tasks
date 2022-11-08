@@ -67,7 +67,7 @@
     },
     components: {
     },
-    created(){
+    async  created(){
 
       if(localStorage.token || sessionStorage.token){
         
@@ -77,10 +77,10 @@
           this.token = sessionStorage.token
         }
 
-        if(this.token != ""){
+        var check = await Axios.check_user(this.token)
+
+        if(check.user.status != "block"){
           this.username = sessionStorage.username
-        }else{
-          this.username = ""
         }
       
       }
@@ -97,18 +97,12 @@
         if(localStorage.token){
             
           localStorage.removeItem('username');
-          localStorage.removeItem('email');
-          localStorage.removeItem('status');
-          localStorage.removeItem('permission');
           localStorage.removeItem('token');
         }
 
         if(sessionStorage.token){
 
           sessionStorage.removeItem('username');
-          sessionStorage.removeItem('email');
-          sessionStorage.removeItem('status');
-          sessionStorage.removeItem('permission');
           sessionStorage.removeItem('token');
         }
 
