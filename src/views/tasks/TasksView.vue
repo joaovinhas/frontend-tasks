@@ -20,9 +20,6 @@
         Nenhuma task encontrada!
       </div>
 
-      <br/>
-      <p>{{c_tasks}}</p>
-
     </main>
   </div>
 </template>

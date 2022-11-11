@@ -96,17 +96,17 @@ class Axios{
 
 //Tasks
 
-	create_task(token, new_task){
+	create_task(token, new_task, id_parent){
 
-		var promise = axios.post(url + '/create_task', { new_task: new_task}, {headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
+		var promise = axios.post(url + '/create_task', { new_task: new_task, id_parent: id_parent}, {headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
 
 		return promise;
 
 	}
 
-	edit_task(){
+	edit_task(token, id_task, edit_task){
 
-		var promise = axios.post(url + '/edit_task').then(response => { return response.data });
+		var promise = axios.post(url + '/edit_task', { id: id_task, edit_task: edit_task}, {headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
 
 		return promise;
 
@@ -128,9 +128,9 @@ class Axios{
 
 	}
 
-	del_task(){
+	del_task(token, id_task){
 
-		var promise = axios.post(url + '/del_task').then(response => { return response.data });
+		var promise = axios.post(url + '/del_task',  { id: id_task}, {headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
 
 		return promise;
 
