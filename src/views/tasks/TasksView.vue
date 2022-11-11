@@ -86,7 +86,7 @@
     methods:{
       async new_task_add(){
 
-        var response = await Axios.create_task(this.token, this.new_task)
+        var response = await Axios.create_task(this.token, this.new_task, 0)
 
         if(response.success){
           console.log(response.success)
@@ -144,7 +144,12 @@
         return root_tasks
       },
 
-    }
+    },
+
+    reload_component(){
+      this.$router.push("/tasks")
+    },
+  
   }
 
 </script>
