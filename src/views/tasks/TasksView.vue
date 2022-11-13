@@ -12,8 +12,8 @@
 
       <div v-if="tasks.root_tasks">
         <ChildTasks
-         v-for="(child, index) in c_tasks" :key="index"
-         :node="child"
+          v-for="(child, index) in c_tasks" :key="index"
+          :node="child"
         />
       </div>
       <div v-else>
@@ -61,7 +61,22 @@
 
         if(check.user.status != "block"){
 
-          var response = await Axios.all_tasks(this.token)
+          this.load_tasks()
+
+        }else{
+          this.$router.push('/login')
+        }
+        
+      }else{
+        this.$router.push('/login')
+      }
+
+    },
+    methods:{
+
+      async load_tasks(){
+        
+        var response = await Axios.all_tasks(this.token)
 
           if(response.root_tasks == null){
             console.log("Nenhuma tasks encontrada!")
@@ -74,21 +89,14 @@
             this.c_tasks = this.tasks.root_tasks
           }
 
-        }else{
-          this.$router.push('/login')
-        }
-        
-      }else{
-        this.$router.push('/login')
-      }
+      },
 
-    },
-    methods:{
       async new_task_add(){
 
         var response = await Axios.create_task(this.token, this.new_task, 0)
 
         if(response.success){
+          this.load_tasks()
           console.log(response.success)
         }else{
           console.log("Erro ao criar a task!")
@@ -144,10 +152,6 @@
         return root_tasks
       },
 
-    },
-
-    reload_component(){
-      this.$router.push("/tasks")
     },
   
   }

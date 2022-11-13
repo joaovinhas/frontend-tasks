@@ -2,7 +2,8 @@
   <div class="about">
     <Navbar/>
     <main class="container">
-      <h1>This is an about page</h1>
+      <h1>Bem Vindo ao Tasks</h1>
+      <p>Esta aplicação web foi criada com o intuito de aprendizagem e com a finalidade de ajudar a organizar e lembrar das suas tarefas</p>
     </main>
   </div>
 </template>

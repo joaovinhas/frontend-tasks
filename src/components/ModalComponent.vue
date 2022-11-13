@@ -73,14 +73,27 @@
 
   },
     methods: {
+
+      reload_component(){
+        this.$parent.reload_component()
+      },
       
       close() {
         this.$emit('close');
       },
 
       async del_task(id_task){
+        
         var response = await Axios.del_task(this.token, id_task)
-        console.log(response)
+        
+        if(response.success){
+          console.log(response.success)
+          this.reload_component()
+        }else{
+          console.log("Erro ao deletar a task!")
+          console.log(response.error)
+        }
+
       },
 
     },

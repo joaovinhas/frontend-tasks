@@ -5,7 +5,6 @@
 
 <script>
 
-//import Axios from '@/api/api.js';
 import Footer from '@/components/FooterComponent.vue'
 
 export default {
@@ -21,6 +20,7 @@ export default {
   }
 
 }
+
 </script>
 
 <style lang="scss">

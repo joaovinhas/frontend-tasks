@@ -5,14 +5,14 @@
       
       <div @click="expanded = !expanded" class="col">
         <span v-if="hasChildren" class="type">[ {{expanded ? '&#45;' : '&#43;'}} ]</span>
-        {{tasks.task}}
+        {{node.task}}
       </div>
 
       <div class="col-sm-auto">
         
         <div class="btn-group" role="group">
           <button @click="show_add = !show_add" type="button" class="btn btn-primary">Add</button>
-          <button @click="show_edit = !show_edit; show_task_edit(tasks.task)" type="button" class="btn btn-secondary">Editar</button>
+          <button @click="show_edit = !show_edit; show_task_edit(node.task)" type="button" class="btn btn-secondary">Editar</button>
           <button @click="show_modal = !show_modal" type="button" class="btn btn-danger">Delete</button>
         </div>
       
@@ -25,7 +25,7 @@
         <input class="form-control" type="text" v-model="new_task" required="required" placeholder="Digite a sua task aqui!">
       </div>
       <div class="col-sm-auto btn-group" role="group">
-        <button @click="add_task(new_task, tasks.id)" type="button" class="btn btn-primary">Salvar</button>
+        <button @click="add_task(new_task, node.id)" type="button" class="btn btn-primary">Salvar</button>
         <button @click="show_add = !show_add" type="button" class="btn btn-danger">Cancelar</button>
       </div>
     </div>
@@ -35,18 +35,18 @@
         <input class="form-control" type="text" v-model="task_edit" required="required">
       </div>
       <div class="col-sm-auto btn-group" role="group">
-        <button @click="edit_task(tasks.id, task_edit)" type="button" class="btn btn-primary">Salvar</button>
+        <button @click="edit_task(node.id, task_edit)" type="button" class="btn btn-primary">Salvar</button>
         <button @click="show_edit = !show_edit" type="button" class="btn btn-danger">Cancelar</button>
       </div>
     </div>
 
-   <Modal v-if="show_modal" @close="show_modal = false" :task="tasks"/>
+   <Modal v-if="show_modal" @close="show_modal = false" :task="node"/>
 
   </li>
   <div v-if="expanded">
       
     <ChildTasksComponent
-      v-for="child in tasks.children"
+      v-for="child in node.children"
       :key="child.task"
       :node="child"
       :depth="depth + 1"
@@ -83,7 +83,6 @@
       }
     },
     async created(){
-      this.tasks = this.node
 
       if(localStorage.token || sessionStorage.token){
 
@@ -117,13 +116,18 @@
     },
     computed: {
       hasChildren(){
-        return this.tasks.children
+        return this.node.children
       }
     },
     methods:{
 
       reload_component(){
-        this.$router.push("/tasks")
+
+        if(this.depth == 0){
+          this.$parent.load_tasks()
+        }else{
+          this.$parent.reload_component()
+        }
       },
 
       async add_task(new_task, id_parent){
@@ -132,6 +136,7 @@
         
         if(response.success){
           console.log(response.success)
+          this.show_add = !this.show_add
           this.reload_component()
         }else{
           console.log("Erro ao criar a task!")
@@ -143,10 +148,13 @@
       async edit_task(id_task, edit_edited){
         
         var response = await Axios.edit_task(this.token, id_task, edit_edited)
-        console.log(response)
-
-        if(response){
+        
+        if(response.success){
+          console.log(response.success)
+          this.show_edit = !this.show_edit
           this.reload_component()
+        }else{
+          console.log("Erro ao alterar task")
         }
 
       },

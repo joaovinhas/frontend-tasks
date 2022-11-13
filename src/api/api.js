@@ -62,9 +62,9 @@ class Axios{
 
 	}
 
-	async edit_user(token){
+	async edit_user(token, username, email){
 
-		var promise = await axios.post(url + '/edit_user', { headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
+		var promise = await axios.post(url + '/edit_user', { name: username, email: email} ,{ headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
 
 		return promise;
 

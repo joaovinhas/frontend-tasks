@@ -2,7 +2,7 @@
   <div>
     <Navbar/>
     <main class="container">
-      <h1>Bem Vindo ao Tasks {{username}}</h1>
+      <h1>Bem Vindo ao Tasks {{username}} <router-link to="/edit_user" class="btn btn-primary" >Editar</router-link> </h1>
       <p>Você possui {{tasks.length}} tasks, vejas suas tasks <router-link to="/tasks">aqui</router-link></p>
       <div v-if="users">
         <p>Numero de usuarios no sistema: {{users.length}}, vejas os usuarios <router-link to="/all_users">aqui</router-link></p>
