@@ -72,15 +72,23 @@ class Axios{
 
 	edit_permission(token, id_user, permission, status){
 
-		var promise = axios.post(url + '/edit_permission',  { id_user: id_user, permission: permission,  status: status }, {headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
+		var promise = axios.post(url + '/edit_permission', { id_user: id_user, permission: permission,  status: status }, {headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
 
 		return promise;
 
 	}
 
-	search_user(){
+	edit_password(token, new_password, confirm_password){
 
-		var promise = axios.post(url + '/search_user').then(response => { return response.data });
+		var promise = axios.post(url + '/edit_password', {  new_password: new_password, confirm_password: confirm_password }, {headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
+
+		return promise;
+
+	}
+
+	search_user(token, type, search){
+
+		var promise = axios.post(url + '/search_user', { type: type, search: search }, {headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
 
 		return promise;
 
@@ -120,9 +128,9 @@ class Axios{
 
 	}
 
-	search_task(){
+	search_task(token, type, search){
 
-		var promise = axios.post(url + '/search_task').then(response => { return response.data });
+		var promise = axios.post(url + '/search_task', { type: type, search: search }, {headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
 
 		return promise;
 
@@ -130,7 +138,7 @@ class Axios{
 
 	del_task(token, id_task){
 
-		var promise = axios.post(url + '/del_task',  { id: id_task}, {headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
+		var promise = axios.post(url + '/del_task', { id: id_task}, {headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
 
 		return promise;
 

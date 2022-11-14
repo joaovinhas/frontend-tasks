@@ -4,6 +4,38 @@
     <main class="container"><br/>
       <h1>Todos usuarios</h1><br/>
 
+<!--Busca usuarios-->
+
+      <div class="input-group">
+        <input v-if="type != 'status' && type != 'permission'" v-model="search" type="text" class="form-control" placeholder="Digite algo na busca aqui!">
+
+        <select v-if="type == 'permission'" v-model="search" class="form-control">
+          <option value="admin">Admin</option>
+          <option value="client">cliente</option>
+        </select>
+
+        <select v-if="type == 'status'" v-model="search" class="form-control">
+          <option value="free">Gratuito</option>
+          <option value="paid">Pago</option>
+          <option value="unlimited">Ilimitado</option>
+          <option value="block">Bloqueado</option>
+        </select>
+
+        <select v-model="type" class="custom-select">
+          <option value="name">Nome</option>
+          <option value="email">Email</option>
+          <option value="status">Status</option>
+          <option value="permission">Permissao</option>
+        </select>     
+        <div class="input-group-append">
+          <button @click="search_task()" class="btn btn-primary" type="button">Buscar</button>
+        </div>
+      </div>
+
+      <br/>
+
+<!--Carrega os usuarios na tela-->
+
       <li v-for="(user, index) in users" :key="index" class="list-group-item list-group-item-dark">
         
         {{user.name}}<br/>
@@ -42,6 +74,8 @@
         token:"",
         users:"",
         permission:"",
+        search:"",
+        type:"name",
       }
     },
     components: {
@@ -89,6 +123,18 @@
         console.log(response)
 
       },
+
+      async search_task(){
+
+        var response = await Axios.search_user(this.token, this.type, this.search)
+        
+        if(response.users){
+          this.users = response.users
+        }else{
+          console.log("Nada encontrado!")
+        }
+
+      }
 
     },
 

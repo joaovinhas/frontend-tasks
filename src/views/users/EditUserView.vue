@@ -141,9 +141,13 @@
 
           if(this.new_password == this.confirm_password){
 
-            var response = await Axios.edit_password(this.token, this.username, this.email)
+            var response = await Axios.edit_password(this.token, this.new_password, this.confirm_password)
 
-            console.log(response)
+            if(response.success){
+              console.log(response.success)
+            }else{
+              console.log(response)
+            }
 
           }else{
             console.log("Senhas diferentes!")
