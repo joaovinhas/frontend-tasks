@@ -2,11 +2,33 @@
   <div>
     <Navbar/>
     <main class="container">
-      <h1>Suas Tasks Aqui!</h1>
-      <div class="input-group mb-3">
+      <h1>Suas Tasks Aqui!</h1><br/>
+
+      <!--Busca usuarios-->
+
+      <div v-if="show_search" class="input-group mb-3">
+        <input v-if="type =='task'" v-model="search" type="text" class="form-control" placeholder="Digite algo na busca aqui!">
+
+        <select v-if="type == 'concluded'" v-model="search" class="form-control">
+          <option selected value="concluded">Concluido</option>
+          <option value="not_concluded">Não concluido</option>
+        </select>
+
+        <select v-model="type" class="custom-select">
+          <option selected value="task">Task</option>
+          <option value="concluded">Concluido</option>
+        </select>     
+        <div class="input-group-append">
+          <button @click="search_task()" class="btn btn-outline-primary" type="button">Buscar</button>
+          <button @click="show_search = !show_search; load_tasks()" class="btn btn-outline-danger" type="button">Voltar</button>
+        </div>
+      </div>
+
+      <div v-if="!show_search" class="input-group mb-3">
         <input v-model="new_task" type="text" class="form-control" placeholder="Digite uma task aqui!" required="required">
         <div class="input-group-append">
           <button @click="new_task_add()" class="btn btn-outline-primary" type="button">Cadastrar task</button>
+          <button @click="show_search = !show_search" class="btn btn-outline-primary" type="button">Busca</button>
         </div>
       </div>
 
@@ -19,6 +41,7 @@
       <div v-else>
         Nenhuma task encontrada!
       </div>
+      <br/>
 
     </main>
   </div>
@@ -41,6 +64,9 @@
         tasks:"",
         c_tasks:"",
         new_task: "",
+        show_search:"",
+        type:"task",
+        search:"",
       }
     },
     async created(){
@@ -152,6 +178,41 @@
         return root_tasks
       },
 
+      async search_task(){
+
+        if(this.type == 'task' || this.type == 'concluded'){
+          
+          var response = await Axios.search_task(this.token, this.type, this.search)
+
+          if(response.root_tasks){
+            if(response.root_tasks.length == 0){
+              this.tasks.root_tasks = false
+            }else{
+              this.tasks.root_tasks = true
+              this.c_tasks = response.root_tasks
+            }
+  
+          }else{
+            this.tasks.root_tasks = false
+          }
+
+        }else{
+          console.log("Valor Invalido!")
+        }
+      },
+
+    },
+
+    watch:{
+      type(){
+        if(this.type == 'concluded'){
+          this.search = 'concluded'
+        }
+
+        if(this.type == 'task'){
+          this.search = ''
+        }
+      }
     },
   
   }
