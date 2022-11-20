@@ -112,9 +112,9 @@ class Axios{
 
 	}
 
-	edit_task(token, id_task, edit_task){
+	edit_task(token, id_task, edit_task, concluded){
 
-		var promise = axios.post(url + '/edit_task', { id: id_task, task: edit_task}, {headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
+		var promise = axios.post(url + '/edit_task', { id: id_task, task: edit_task, concluded: concluded}, {headers: {"Authorization" : `Bearer ${token}`}} ).then(response => { return response.data });
 
 		return promise;
 

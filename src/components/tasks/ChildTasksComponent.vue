@@ -6,6 +6,13 @@
       <div @click="expanded = !expanded" class="col">
         <span v-if="hasChildren" class="type">[ {{expanded ? '&#45;' : '&#43;'}} ]</span>
         {{node.task}}
+
+      </div>
+
+      <div class="form-check form-switch col">
+        <input v-if="!node.concluded" class="form-check-input" type="checkbox" role="switch" disabled>
+        <input v-if="node.concluded" class="form-check-input" type="checkbox" checked disabled role="switch">
+        <label class="form-check-label">Concluido</label>
       </div>
 
       <div class="col-sm-auto">
@@ -34,8 +41,12 @@
       <div class="col">
         <input class="form-control" type="text" v-model="task_edit" required="required">
       </div>
+      <div class="form-check form-switch col-sm-auto">
+        <input @click="task_ckecks()" v-model="task_ckeck" class="form-check-input" type="checkbox" role="switch">
+        <label class="form-check-label">Concluido</label>
+      </div>
       <div class="col-sm-auto btn-group" role="group">
-        <button @click="edit_task(node.id, task_edit)" type="button" class="btn btn-primary">Salvar</button>
+        <button @click="edit_task(node.id, task_edit, task_ckeck)" type="button" class="btn btn-primary">Salvar</button>
         <button @click="show_edit = !show_edit" type="button" class="btn btn-danger">Cancelar</button>
       </div>
     </div>
@@ -76,6 +87,7 @@
         tasks:"",
         new_task:"",
         task_edit:"",
+        task_ckeck:"",
         expanded: false,
         show_add: false,
         show_edit: false,
@@ -104,6 +116,9 @@
 
           this.$router.push('/login')
 
+        }else{
+
+          this.tasks = this.node
         }
         
       }else{
@@ -145,10 +160,10 @@
 
       },
 
-      async edit_task(id_task, edit_edited){
-        
-        var response = await Axios.edit_task(this.token, id_task, edit_edited)
-        
+      async edit_task(id_task, edit_edited, concluded){
+
+        var response = await Axios.edit_task(this.token, id_task, edit_edited, concluded)
+
         if(response.success){
           console.log(response.success)
           this.show_edit = !this.show_edit
@@ -163,6 +178,10 @@
 
         this.task_edit = task
       },
+
+      task_ckecks(){
+        this.task_ckeck = !this.task_ckeck
+      }
 
     },
   } 

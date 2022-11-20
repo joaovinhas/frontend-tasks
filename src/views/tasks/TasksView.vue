@@ -188,8 +188,12 @@
             if(response.root_tasks.length == 0){
               this.tasks.root_tasks = false
             }else{
-              this.tasks.root_tasks = true
-              this.c_tasks = response.root_tasks
+
+              this.tasks = response
+
+              this.childtasks()
+
+              this.c_tasks = this.tasks.root_tasks
             }
   
           }else{
