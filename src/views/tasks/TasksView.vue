@@ -2,6 +2,7 @@
   <div>
     <Navbar/>
     <main class="container">
+      <Notification v-if="notification" :message="notification"/>
       <h1>Suas Tasks Aqui!</h1><br/>
 
       <!--Busca usuarios-->
@@ -39,7 +40,7 @@
         />
       </div>
       <div v-else>
-        Nenhuma task encontrada!
+        <p>Nenhuma task encontrada!</p>
       </div>
       <br/>
 
@@ -50,6 +51,7 @@
 <script>
   import Axios from '@/api/api.js';
   import Navbar from '@/components/NavbarComponent.vue'
+  import Notification from '@/components/NotificationComponent.vue'
   import ChildTasks from '@/components/tasks/ChildTasksComponent.vue'
 
   export default {
@@ -57,6 +59,7 @@
     components: {
       Navbar,
       ChildTasks,
+      Notification,
     },
     data(){
       return{
@@ -67,6 +70,7 @@
         show_search:"",
         type:"task",
         search:"",
+        notification:'',
       }
     },
     async created(){
@@ -89,6 +93,9 @@
 
           this.load_tasks()
 
+          this.notification = new Object()
+          this.notification.success = "TESTE"
+
         }else{
           this.$router.push('/login')
         }
@@ -104,9 +111,7 @@
         
         var response = await Axios.all_tasks(this.token)
 
-          if(response.root_tasks == null){
-            console.log("Nenhuma tasks encontrada!")
-          }else{
+          if(response.root_tasks.length != 0){
             
             this.tasks = response
 
@@ -122,6 +127,7 @@
         var response = await Axios.create_task(this.token, this.new_task, 0)
 
         if(response.success){
+          this.new_task = ''
           this.load_tasks()
           console.log(response.success)
         }else{
@@ -185,10 +191,8 @@
           var response = await Axios.search_task(this.token, this.type, this.search)
 
           if(response.root_tasks){
-            if(response.root_tasks.length == 0){
-              this.tasks.root_tasks = false
-            }else{
-
+            if(response.root_tasks.length != 0){
+              
               this.tasks = response
 
               this.childtasks()
