@@ -2,6 +2,7 @@
   <div>
     <Navbar/>
     <main class="container"><br/>
+      <Notification v-if="notification" :message="notification"/>
       <h1>Todos usuarios</h1><br/>
 
 <!--Busca usuarios-->
@@ -66,6 +67,7 @@
 
   import Axios from '@/api/api.js';
   import Navbar from '@/components/NavbarComponent.vue'
+  import Notification from '@/components/NotificationComponent.vue'
 
   export default {
     name: 'RegisterView',
@@ -76,10 +78,12 @@
         permission:"",
         search:"",
         type:"name",
+        notification:"",
       }
     },
     components: {
       Navbar,
+      Notification,
     },
     async created(){ 
 
@@ -116,11 +120,15 @@
     },
     methods:{
 
+      close_notification(){
+        this.notification = ""
+      },
+
       async alt_user(id_user, permission, status){
 
         var response = await Axios.edit_permission(this.token, id_user, permission, status)
 
-        console.log(response)
+        this.notification = response
 
       },
 
@@ -131,7 +139,8 @@
         if(response.users){
           this.users = response.users
         }else{
-          console.log("Nada encontrado!")
+          this.notification = new Object()
+          this.notification.error = "Nenhum usuario encontrado!"
         }
 
       }

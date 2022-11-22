@@ -136,6 +136,16 @@
     },
     methods:{
 
+      notifications_child(notification){
+
+        if(this.depth == 0){
+          this.$parent.notifications(notification)
+        }else{
+          this.$parent.notifications_child(notification)
+        }
+
+      },
+
       reload_component(){
 
         if(this.depth == 0){
@@ -150,26 +160,31 @@
         var response = await Axios.create_task(this.token, new_task, id_parent)
         
         if(response.success){
-          console.log(response.success)
+          this.notifications_child(response)
           this.show_add = !this.show_add
           this.reload_component()
         }else{
-          console.log("Erro ao criar a task!")
-          console.log(response.error)
+          this.notifications_child(response)
         }
 
       },
 
       async edit_task(id_task, edit_edited, concluded){
 
+        if(concluded != 1){
+          concluded = 0
+        }
+
         var response = await Axios.edit_task(this.token, id_task, edit_edited, concluded)
 
         if(response.success){
-          console.log(response.success)
           this.show_edit = !this.show_edit
           this.reload_component()
+          this.notifications_child(response)
         }else{
-          console.log("Erro ao alterar task")
+          var notification = new Object()
+          notification = "Erro ao alterar task"
+          this.notifications_child(notification)
         }
 
       },

@@ -62,16 +62,12 @@
         
         if(localStorage.token){
           this.token = localStorage.token
+          this.username = localStorage.username
         }else{
           this.token = sessionStorage.token
-        }
-
-        var check = await Axios.check_user(this.token)
-
-        if(check.user.status != "block"){
           this.username = sessionStorage.username
         }
-      
+
       }
 
     },
@@ -81,21 +77,25 @@
 
         var response = await Axios.logout(this.token)
 
-        console.log(response)
-
-        if(localStorage.token){
+        if(response.success){
+          if(localStorage.token){
             
-          localStorage.removeItem('username');
-          localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            localStorage.removeItem('token');
+            localStorage.removeItem('logged');
+          }
+
+          if(sessionStorage.token){
+
+            sessionStorage.removeItem('username');
+            sessionStorage.removeItem('token');
+          }
+
+          this.$router.push('/login')
+        
+        }else{
+          console.log("Erro ao deslogar!")
         }
-
-        if(sessionStorage.token){
-
-          sessionStorage.removeItem('username');
-          sessionStorage.removeItem('token');
-        }
-
-        this.$router.push('/login')
 
       }
 

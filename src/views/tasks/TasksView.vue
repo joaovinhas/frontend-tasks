@@ -93,9 +93,6 @@
 
           this.load_tasks()
 
-          this.notification = new Object()
-          this.notification.success = "TESTE"
-
         }else{
           this.$router.push('/login')
         }
@@ -106,6 +103,16 @@
 
     },
     methods:{
+
+      notifications(notification){
+
+        this.notification = notification
+
+      },
+
+      close_notification(){
+        this.notification = ""
+      },
 
       async load_tasks(){
         
@@ -129,9 +136,10 @@
         if(response.success){
           this.new_task = ''
           this.load_tasks()
-          console.log(response.success)
+          this.notification = response
         }else{
-          console.log("Erro ao criar a task!")
+          this.notification = new Object()
+          this.notification.error = "Erro ao criar task!"
         }
 
       },
@@ -205,7 +213,8 @@
           }
 
         }else{
-          console.log("Valor Invalido!")
+          this.notification = new Object()
+          this.notification.error = "Valor Invalido!"
         }
       },
 

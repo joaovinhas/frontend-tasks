@@ -7,6 +7,9 @@
       <div v-if="users">
         <p>Numero de usuarios no sistema: {{users.length}}, vejas os usuarios <router-link to="/all_users">aqui</router-link></p>
       </div>
+
+      <Notification v-if="notification" :message="notification"/>
+
     </main>
   </div>
 </template>
@@ -15,6 +18,7 @@
 
 import Axios from '@/api/api.js';
 import Navbar from '@/components/NavbarComponent.vue'
+import Notification from '@/components/NotificationComponent.vue'
 
 export default {
   name: 'DashboardView',
@@ -24,6 +28,7 @@ export default {
       username:"",
       users: "",
       tasks:"",
+      notification:'',
     }
   },
   async created(){
@@ -46,6 +51,12 @@ export default {
 
       if(check.user.status != "block"){
 
+        if(check.user.date < 7 && check.user.status == 'free'){
+          var days = 7 - check.user.date
+          this.notification = new Object()
+          this.notification.success = "Conta free, valido por "+days+" dias"
+        }
+
         var response = await Axios.dashboard(this.token)
 
         if(response.users){
@@ -66,6 +77,7 @@ export default {
   },
   components: {
     Navbar,
+    Notification,
   }
 }
 

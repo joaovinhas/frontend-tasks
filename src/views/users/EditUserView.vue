@@ -5,6 +5,8 @@
       
       <div class="row align-items-center justify-content-center">
         
+        <Notification v-if="notification" :message="notification"/>
+
       <form v-if="!show_password" class="col">
         <h2>Edite seu usuario aqui!</h2>
 
@@ -42,14 +44,14 @@
         <div class="mb-3 row">
           <label class="col-sm-12 col-form-label">Nova Senha</label>
           <div class="col-sm-12">
-            <input v-model="new_password" type="password" class="form-control" placeholder="Digite sua nova senha aqui!" required="required">
+            <input v-model="new_password" type="password" class="form-control" placeholder="Digite sua nova senha aqui!" min="8" required="required">
           </div>
         </div>
 
         <div class="mb-3 row">
           <label class="col-sm-12 col-form-label">Confirmar Senha</label>
           <div class="col-sm-12">
-            <input v-model="confirm_password" type="password" class="form-control" placeholder="Confirme sua senha aqui!" required="required">
+            <input v-model="confirm_password" type="password" class="form-control" placeholder="Confirme sua senha aqui!" min="8" required="required">
           </div>
         </div>
 
@@ -68,6 +70,7 @@
   
   import Axios from '@/api/api.js';
   import Navbar from '@/components/NavbarComponent.vue'
+  import Notification from '@/components/NotificationComponent.vue'
 
   export default {
     name: 'EditUserView',
@@ -79,10 +82,12 @@
         confirm_password: "",
         token:"",
         show_password: false,
+        notification:"",
       }
     },
     components: {
       Navbar,
+      Notification,
     },
     async created(){
 
@@ -108,7 +113,7 @@
             this.username = response.user.username
             this.email = response.user.email
           }else{
-            console.log(response)
+            this.notification = response
           }
 
         }else{
@@ -121,16 +126,21 @@
     },
     methods:{
 
+      close_notification(){
+        this.notification = ""
+      },
+
       async edit_user(){
 
         if(this.username != null && this.email != null){
 
           var response = await Axios.edit_user(this.token, this.username, this.email)
 
-          console.log(response)
+          this.notification = response
 
-        }else{ 
-          console.log("Usuario ou email invalido!")
+        }else{
+          this.notification = new Object()
+          this.notification.error = "Usuario ou email invalido!" 
         }
 
       },
@@ -141,20 +151,23 @@
 
           if(this.new_password == this.confirm_password){
 
-            var response = await Axios.edit_password(this.token, this.new_password, this.confirm_password)
-
-            if(response.success){
-              console.log(response.success)
+            if(this.new_password.length < 8){
+              this.notification = new Object()
+              this.notification.error = "Senha precisa ter no minimo 8 caracteres!"
             }else{
-              console.log(response)
+              var response = await Axios.edit_password(this.token, this.new_password, this.confirm_password)
+
+              this.notification = response
             }
 
           }else{
-            console.log("Senhas diferentes!")
+            this.notification = new Object()
+            this.notification.error = "Senhas diferentes!"
           }
 
         }else{ 
-          console.log("Senha invalida!")
+          this.notification = new Object()
+          this.notification.error = "Senha invalida!"
         }
 
       },

@@ -73,6 +73,9 @@
 
   },
     methods: {
+      notifications_child(notification){
+        this.$parent.notifications_child(notification)
+      },
 
       reload_component(){
         this.$parent.reload_component()
@@ -87,11 +90,10 @@
         var response = await Axios.del_task(this.token, id_task)
         
         if(response.success){
-          console.log(response.success)
+          this.notifications_child(response)
           this.reload_component()
         }else{
-          console.log("Erro ao deletar a task!")
-          console.log(response.error)
+          this.notifications_child(response)
         }
 
       },
