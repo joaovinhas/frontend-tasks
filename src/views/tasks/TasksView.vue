@@ -214,7 +214,7 @@
 
         }else{
           this.notification = new Object()
-          this.notification.error = "Valor Invalido!"
+          this.notification.error = "Valor Inválido!"
         }
       },
 

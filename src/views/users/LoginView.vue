@@ -99,7 +99,7 @@
 
             this.$router.push("/dashboard")
 
-          }else if(response.success){
+          }else if(response.error){
 
             this.notification = response
 
