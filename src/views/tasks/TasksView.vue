@@ -3,7 +3,7 @@
     <Navbar/>
     <main class="container">
       <Notification v-if="notification" :message="notification"/>
-      <h1>Suas Tasks Aqui!</h1><br/>
+      <h1>Suas Tasks Aqui! <button @click="salvar_tasks()" type="button" class="btn btn-primary">Salvar Alterações</button></h1><br/>
 
       <!--Busca usuarios-->
 
@@ -65,6 +65,7 @@
       return{
         token: "",
         tasks:"",
+        old_tasks:"",
         c_tasks:"",
         new_task: "",
         show_search:"",
@@ -133,6 +134,7 @@
 
         if(this.new_task != ""){
           this.c_tasks.push({'task': this.new_task, 'concluded': false, 'task_parent': 'null' })
+          this.new_task = ""
         }else{
           console.log("Valor nulo")
         }
@@ -231,6 +233,12 @@
         }
       },
 
+//Salvar Tasks
+      
+      async salvar_tasks(){
+        this.old_tasks = await Axios.all_tasks(this.token)
+        console.log(this.c_tasks)
+      },
 /*
       async new_task_add(){
 
@@ -247,6 +255,9 @@
 
       },
 */
+
+//Cria a tree de tasks
+      
       childtasks(){
 
         if(this.tasks.child_tasks.lenght != 0){
