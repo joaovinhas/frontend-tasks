@@ -65,6 +65,7 @@
       return{
         token: "",
         tasks:"",
+        new_tasks:"",
         old_tasks:"",
         c_tasks:"",
         new_task: "",
@@ -149,9 +150,9 @@
           if(this.c_tasks[i].task == task_parent){
 
             if(this.c_tasks[i].children){
-              this.c_tasks[i].children.push({'task': new_task, 'concluded': false, 'task_parent': 'null' })
+              this.c_tasks[i].children.push({'task': new_task, 'concluded': false, 'task_parent': task_parent })
             }else{
-              this.c_tasks[i].children = Object.assign([{'task': new_task, 'concluded': false, 'task_parent': 'null' }])
+              this.c_tasks[i].children = Object.assign([{'task': new_task, 'concluded': false, 'task_parent': task_parent }])
             }
           }
 
@@ -167,9 +168,9 @@
           if(children[i].task == task_parent){
 
             if(children[i].children){
-              children[i].children.push({'task': new_task, 'concluded': false, 'task_parent': 'null' })
+              children[i].children.push({'task': new_task, 'concluded': false, 'task_parent': task_parent })
             }else{
-              children[i].children = Object.assign([{'task': new_task, 'concluded': false, 'task_parent': 'null' }])
+              children[i].children = Object.assign([{'task': new_task, 'concluded': false, 'task_parent': task_parent }])
             }
           }
 
@@ -237,7 +238,53 @@
       
       async salvar_tasks(){
         this.old_tasks = await Axios.all_tasks(this.token)
-        console.log(this.c_tasks)
+
+        if(this.c_tasks.length){
+
+          for(let i = 0; i < this.c_tasks.length; i++){
+
+            if(this.c_tasks[i].id){
+              console.log("Task Antiga")
+            }else{
+              if(this.new_tasks == ""){
+                this.new_tasks = [this.c_tasks[i]]
+              }else{
+                this.new_tasks.push(this.c_tasks[i])
+              }
+            }
+
+            if(this.c_tasks[i].children){
+              this.search_tree_save(this.c_tasks[i].children)
+            }
+
+          }
+
+        }
+
+        //console.log(this.c_tasks)
+        console.log(this.new_tasks)
+        this.new_tasks = ""
+
+      },
+
+      search_tree_save(children){
+
+        for(let i = 0; i < children.length; i++){
+          if(children[i].id){
+            console.log("Task Antiga C")
+          }else{
+            if(this.new_tasks == ""){
+              this.new_tasks = [children[i]]
+            }else{
+              this.new_tasks.push(children[i])
+            }
+          }
+
+          if(children[i].children){
+            this.search_tree_save(children[i].children)
+          }
+        }
+
       },
 /*
       async new_task_add(){
