@@ -65,10 +65,12 @@
       return{
         token: "",
         tasks:"",
-        new_tasks:"",
-        old_tasks:"",
         c_tasks:"",
         new_task: "",
+        new_tasks:"",
+        edited_tasks:"",
+        del_tasks:"",
+        old_tasks:"",
         show_search:"",
         type:"task",
         search:"",
@@ -244,7 +246,29 @@
           for(let i = 0; i < this.c_tasks.length; i++){
 
             if(this.c_tasks[i].id){
-              console.log("Task Antiga")
+
+//Tasks editadas
+
+              if(this.c_tasks[i].id == this.old_tasks.root_tasks[i].id){
+
+                if(this.c_tasks[i].task != this.old_tasks.root_tasks[i].task){
+                  if(this.edited_tasks == ""){
+                    this.edited_tasks = [this.c_tasks[i]]
+                  }else{
+                    this.edited_tasks.push(this.c_tasks[i])
+                  }
+                }
+
+                if(this.c_tasks[i].concluded != this.old_tasks.root_tasks[i].concluded){
+                  if(this.edited_tasks == ""){
+                    this.edited_tasks = [this.c_tasks[i]]
+                  }else{
+                    this.edited_tasks.push(this.c_tasks[i])
+                  }
+                }
+                
+              }
+
             }else{
               if(this.new_tasks == ""){
                 this.new_tasks = [this.c_tasks[i]]
@@ -254,24 +278,85 @@
             }
 
             if(this.c_tasks[i].children){
-              this.search_tree_save(this.c_tasks[i].children)
+              this.search_tree_save_add(this.c_tasks[i].children)
             }
 
           }
 
         }
 
-        //console.log(this.c_tasks)
+//Select tasks para deletar
+
+        for(let i = 0; i < this.old_tasks.root_tasks.length; i++){
+
+          var check_task = false
+
+          for(let x = 0; x < this.c_tasks.length; x++){
+
+            if(this.old_tasks.root_tasks[i].id == this.c_tasks[x].id){
+              check_task = true
+
+              if(this.old_tasks.root_tasks[i].children){
+                this.search_tree_save_del(this.old_tasks.root_tasks[i].children)
+              }
+
+              break
+
+            }
+
+          }
+
+          if(check_task == false){
+            if(this.del_tasks == ""){
+              this.del_tasks = [this.old_tasks.root_tasks[i]]
+            }else{
+              this.del_tasks.push(this.old_tasks.root_tasks[i])
+            }
+          }
+
+        }
+
         console.log(this.new_tasks)
+        console.log(this.edited_tasks)
+        console.log(this.del_tasks)
+        this.del_tasks = ""
+        this.edited_tasks = ""
         this.new_tasks = ""
 
       },
 
-      search_tree_save(children){
+      search_tree_save_add(children){
 
         for(let i = 0; i < children.length; i++){
           if(children[i].id){
-            console.log("Task Antiga C")
+            
+//Tasks editadas
+
+              for(let x = 0; x < this.old_tasks.child_tasks.length; x++){
+
+                if(children[i].id == this.old_tasks.child_tasks[x].id){
+
+                  if(children[i].task != this.old_tasks.child_tasks[x].task){
+                    if(this.edited_tasks == ""){
+                      this.edited_tasks = [children[i]]
+                    }else{
+                      this.edited_tasks.push(children[i])
+                    }
+                  }
+
+                  if(children[i].concluded != this.old_tasks.child_tasks[x].concluded){
+                    if(this.edited_tasks == ""){
+                      this.edited_tasks = [children[i]]
+                    }else{
+                      this.edited_tasks.push(children[i])
+                    }
+                  }
+
+                }
+
+              }
+
+
           }else{
             if(this.new_tasks == ""){
               this.new_tasks = [children[i]]
@@ -281,8 +366,42 @@
           }
 
           if(children[i].children){
-            this.search_tree_save(children[i].children)
+            this.search_tree_save_add(children[i].children)
           }
+        }
+
+      },
+//Select child tasks para deletar
+      search_tree_save_del(children){
+
+        for(let i = 0; i < children.length; i++){
+
+          var check_task = false
+
+          for(let x = 0; x < this.old_tasks.child_tasks.length; x++){
+
+            if(children[i].id == this.old_tasks.child_tasks[x].id){
+              check_task = true
+              
+              if(children[i].children){
+                this.search_tree_save_del(children[i].children)
+              }
+              
+              break
+            }else{
+              check_task = false
+            }
+
+          }
+
+          if(check_task == false){
+            if(this.del_tasks == ""){
+              this.del_tasks = [children[i]]
+            }else{
+              this.del_tasks.push(children[i])
+            }
+          }
+
         }
 
       },
@@ -349,8 +468,6 @@
           }
 
         }
-
-        return root_tasks
       },
 
       async search_task(){

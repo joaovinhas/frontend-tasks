@@ -112,7 +112,7 @@
           this.$router.push('/login')
 
         }else{
-          this.node = this.tasks
+          this.load_tree_tasks()
         }
         
       }else{
@@ -129,6 +129,10 @@
       }
     },
     methods:{
+
+      load_tree_tasks(){
+        this.node = this.tasks
+      },
 
       notifications_child(notification){
 
@@ -219,6 +223,12 @@
         this.task_edit = task
       },
 
+    },
+
+    watch:{
+      tasks(){
+        this.load_tree_tasks()
+      }
     },
   } 
 
