@@ -43,7 +43,6 @@
         <p>Nenhuma task encontrada!</p>
       </div>
       <br/>
-
     </main>
   </div>
 </template>
@@ -217,6 +216,10 @@
         for(let i = 0; i < this.c_tasks.length; i++){
           if(this.c_tasks[i].children){
             this.search_tree_del(task, this.c_tasks[i].children)
+            if(this.c_tasks[i].children.length == 0){
+              delete this.c_tasks[i].children
+            }
+            
           }
           if(this.c_tasks[i].task == task){
             this.c_tasks.splice(i, 1)
@@ -229,6 +232,9 @@
         for(let i = 0; i < children.length; i++){
           if(children[i].children){
             this.search_tree_del(task, children[i].children)
+            if(children[i].children.length == 0){
+              delete children[i].children
+            }
           }
           if(children[i].task == task){
             children.splice(i, 1)
@@ -247,26 +253,30 @@
 
             if(this.c_tasks[i].id){
 
-//Tasks editadas
+            //Tasks editadas
 
-              if(this.c_tasks[i].id == this.old_tasks.root_tasks[i].id){
+              for(let x = 0; x < this.old_tasks.root_tasks.length; x++){
 
-                if(this.c_tasks[i].task != this.old_tasks.root_tasks[i].task){
-                  if(this.edited_tasks == ""){
-                    this.edited_tasks = [this.c_tasks[i]]
-                  }else{
-                    this.edited_tasks.push(this.c_tasks[i])
+                if(this.c_tasks[i].id == this.old_tasks.root_tasks[x].id){
+
+                  if(this.c_tasks[i].task != this.old_tasks.root_tasks[x].task){
+                    if(this.edited_tasks == ""){
+                      this.edited_tasks = [this.c_tasks[i]]
+                    }else{
+                      this.edited_tasks.push(this.c_tasks[i])
+                    }
                   }
+
+                  if(this.c_tasks[i].concluded != this.old_tasks.root_tasks[x].concluded){
+                    if(this.edited_tasks == ""){
+                      this.edited_tasks = [this.c_tasks[i]]
+                    }else{
+                      this.edited_tasks.push(this.c_tasks[i])
+                    }
+                  }
+
                 }
 
-                if(this.c_tasks[i].concluded != this.old_tasks.root_tasks[i].concluded){
-                  if(this.edited_tasks == ""){
-                    this.edited_tasks = [this.c_tasks[i]]
-                  }else{
-                    this.edited_tasks.push(this.c_tasks[i])
-                  }
-                }
-                
               }
 
             }else{
@@ -285,7 +295,7 @@
 
         }
 
-//Select tasks para deletar
+    //Select tasks para deletar
 
         for(let i = 0; i < this.old_tasks.root_tasks.length; i++){
 
@@ -296,11 +306,21 @@
             if(this.old_tasks.root_tasks[i].id == this.c_tasks[x].id){
               check_task = true
 
-              if(this.old_tasks.root_tasks[i].children){
-                this.search_tree_save_del(this.old_tasks.root_tasks[i].children)
-              }
+              if(this.c_tasks[x].children){
 
-              break
+                this.search_tree_save_del(this.c_tasks[x].children)
+
+              }else{
+                for(let y = 0; y < this.old_tasks.child_tasks.length; y++){
+                  if(this.old_tasks.child_tasks[y].id_parent == this.old_tasks.root_tasks[i].id){
+                    if(this.del_tasks == ""){
+                      this.del_tasks = [this.old_tasks.child_tasks[y]]
+                    }else{
+                      this.del_tasks.push(this.old_tasks.child_tasks[y])
+                    }
+                  }
+                }
+              }
 
             }
 
@@ -330,7 +350,7 @@
         for(let i = 0; i < children.length; i++){
           if(children[i].id){
             
-//Tasks editadas
+            //Tasks editadas
 
               for(let x = 0; x < this.old_tasks.child_tasks.length; x++){
 
@@ -375,21 +395,15 @@
       search_tree_save_del(children){
 
         for(let i = 0; i < children.length; i++){
-
           var check_task = false
-
           for(let x = 0; x < this.old_tasks.child_tasks.length; x++){
 
-            if(children[i].id == this.old_tasks.child_tasks[x].id){
+            if(children[i].children){
+              this.search_tree_save_del(children[i].children)
+            }
+
+            if(this.old_tasks.child_tasks[x].id == children[i].id){
               check_task = true
-              
-              if(children[i].children){
-                this.search_tree_save_del(children[i].children)
-              }
-              
-              break
-            }else{
-              check_task = false
             }
 
           }
