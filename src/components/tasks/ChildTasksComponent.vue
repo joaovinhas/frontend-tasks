@@ -10,7 +10,7 @@
       </div>
 
       <div class="form-check form-switch col">
-        <input v-model="node.concluded" class="form-check-input" type="checkbox" role="switch">
+        <input v-model="node.concluded" class="form-check-input" type="checkbox" :checked="node.concluded" role="switch">
         <label class="form-check-label">Concluido</label>
       </div>
 
@@ -183,41 +183,6 @@
 
       },
 
-/*
-      async add_task(new_task, task_parent){
-
-        var response = await Axios.create_task(this.token, new_task, task_parent)
-
-        if(response.success){
-          this.notifications_child(response)
-          this.show_add = !this.show_add
-          this.reload_component()
-        }else{
-          this.notifications_child(response)
-        }
-
-      },
-
-      async edit_task(id_task, edit_edited, concluded){
-
-        if(concluded != 1){
-          concluded = 0
-        }
-
-        var response = await Axios.edit_task(this.token, id_task, edit_edited, concluded)
-
-        if(response.success){
-          this.show_edit = !this.show_edit
-          this.reload_component()
-          this.notifications_child(response)
-        }else{
-          var notification = new Object()
-          notification = "Erro ao alterar task"
-          this.notifications_child(notification)
-        }
-
-      },
-*/
       show_task_edit(task){
 
         this.task_edit = task

@@ -336,12 +336,19 @@
 
         }
 
-        console.log(this.new_tasks)
-        console.log(this.edited_tasks)
-        console.log(this.del_tasks)
-        this.del_tasks = ""
-        this.edited_tasks = ""
-        this.new_tasks = ""
+        if(this.del_tasks == "" && this.edited_tasks == "" && this.new_tasks == ""){
+          
+          this.notification = new Object()
+          this.notification.error = "Nenhuma alteração encontrada!"
+        
+        }else{
+
+          this.save_tasks_api()
+
+          this.del_tasks = ""
+          this.edited_tasks = ""
+          this.new_tasks = ""
+        }
 
       },
 
@@ -394,9 +401,9 @@
 //Select child tasks para deletar
       search_tree_save_del(children){
 
-        for(let i = 0; i < children.length; i++){
+        for(let x = 0; x < this.old_tasks.child_tasks.length; x++){
           var check_task = false
-          for(let x = 0; x < this.old_tasks.child_tasks.length; x++){
+          for(let i = 0; i < children.length; i++){
 
             if(children[i].children){
               this.search_tree_save_del(children[i].children)
@@ -404,37 +411,65 @@
 
             if(this.old_tasks.child_tasks[x].id == children[i].id){
               check_task = true
+              break
+            }
+            if(children[i].id){
+              check_task = true
+              break
             }
 
           }
 
           if(check_task == false){
             if(this.del_tasks == ""){
-              this.del_tasks = [children[i]]
+              this.del_tasks = this.old_tasks.child_tasks[x]
             }else{
-              this.del_tasks.push(children[i])
+              this.del_tasks.push( this.old_tasks.child_tasks[x] )
             }
           }
 
         }
 
       },
-/*
-      async new_task_add(){
 
-        var response = await Axios.create_task(this.token, this.new_task, 'null')
+//Mandar tasks para banco de dados
 
-        if(response.success){
-          this.new_task = ''
-          this.load_tasks()
-          this.notification = response
-        }else{
+      async save_tasks_api(){
+
+        var response = ""
+
+        if(this.new_tasks.length){
+
+          for(let i = 0; i < this.new_tasks.length; i ++){
+
+            response = await Axios.create_task(this.token, this.new_tasks[i].task, this.new_tasks[i].task_parent)
+          }
+
+        }
+
+        if(this.edited_tasks.length){
+
+          for(let i = 0; i < this.edited_tasks.length; i ++){
+
+            response = await Axios.edit_task(this.token, this.edited_tasks[i].id, this.edited_tasks[i].task, this.edited_tasks[i].concluded)
+          }
+
+        }
+
+        if(this.del_tasks.length){
+
+          for(let i = 0; i < this.del_tasks.length; i ++){
+            response = await Axios.del_task(this.token, this.del_tasks[i].id)
+          }
+
+        }
+
+        if(response != ""){
           this.notification = new Object()
-          this.notification.error = "Erro ao criar task!"
+          this.notification.success = "Alterações salvas com sucesso!"
         }
 
       },
-*/
 
 //Cria a tree de tasks
       
