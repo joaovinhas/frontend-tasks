@@ -6,18 +6,18 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Tem certeza que quer deletar essa task! </h5>
+            <h5 class="modal-title" id="exampleModalLabel">Salvando alterações! </h5>
             <button @click="close" type="button" class="close" aria-label="Fechar">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            Você esta deletando a task: {{task.task}}.<br/>
-            Isso vai apagar as suas subtasks tambem!
+            Tem certeza que desaja salvar as alterações!.<br/>
+            As tasks apagadas não terão como ser recuperadas!
           </div>
           <div class="modal-footer">
-            <button @click="close" type="button" class="btn btn-secondary">Cancelar</button>
-            <button @click="del_task(task.id)" type="button" class="btn btn-danger">Deletar</button>
+            <button @click="close" type="button" class="btn btn-danger">Cancelar</button>
+            <button @click="save_tasks()" type="button" class="btn btn-success">Salvar</button>
           </div>
         </div>
       </div>
@@ -33,16 +33,12 @@
 
   export default {
     name: 'ModalComponent',
-    props:{
-      task: Object,
-    },
     data(){
       return{
         token:"",
       }
     },
-    components: {
-    },
+
     async created(){
 
     if(localStorage.token || sessionStorage.token){
@@ -73,29 +69,13 @@
 
   },
     methods: {
-      notifications_child(notification){
-        this.$parent.notifications_child(notification)
-      },
-
-      reload_component(){
-        this.$parent.reload_component()
+      
+      save_tasks(){
+        this.$parent.salvar_tasks()
       },
       
       close() {
         this.$emit('close');
-      },
-
-      async del_task(id_task){
-        
-        var response = await Axios.del_task(this.token, id_task)
-        
-        if(response.success){
-          this.notifications_child(response)
-          this.reload_component()
-        }else{
-          this.notifications_child(response)
-        }
-
       },
 
     },

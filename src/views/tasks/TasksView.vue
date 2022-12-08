@@ -2,8 +2,11 @@
   <div>
     <Navbar/>
     <main class="container">
+      
+      <Modal v-if="show_modal" @close="show_modal = false"/>
       <Notification v-if="notification" :message="notification"/>
-      <h1>Suas Tasks Aqui! <button @click="salvar_tasks()" type="button" class="btn btn-primary">Salvar Alterações</button></h1><br/>
+
+      <h1>Suas Tasks Aqui! <button @click="show_modal = !show_modal" type="button" class="btn btn-primary">Salvar Alterações</button></h1><br/>
 
       <!--Busca usuarios-->
 
@@ -52,6 +55,7 @@
   import Navbar from '@/components/NavbarComponent.vue'
   import Notification from '@/components/NotificationComponent.vue'
   import ChildTasks from '@/components/tasks/ChildTasksComponent.vue'
+  import Modal from '@/components/ModalComponent.vue'
 
   export default {
     name: 'TasksView',
@@ -59,6 +63,7 @@
       Navbar,
       ChildTasks,
       Notification,
+      Modal,
     },
     data(){
       return{
@@ -74,6 +79,7 @@
         type:"task",
         search:"",
         notification:'',
+        show_modal:false,
       }
     },
     async created(){
@@ -139,8 +145,17 @@
       new_task_add(){
 
         if(this.new_task != ""){
-          this.c_tasks.push({'task': this.new_task, 'concluded': false, 'task_parent': 'null' })
-          this.new_task = ""
+
+          var check_task = this.search_exist_tasks(this.c_tasks, this.new_task)
+
+          if(check_task){
+            this.notification = new Object()
+            this.notification.error = "Task já existe!"
+          }else{
+            this.c_tasks.push({'task': this.new_task, 'concluded': false, 'task_parent': 'null' })
+            this.new_task = ""
+          }
+
         }else{
           console.log("Valor nulo")
         }
@@ -150,20 +165,29 @@
 
       new_child_task(new_task, task_parent){
 
-        for(let i = 0; i < this.c_tasks.length; i++){
+        var check_task = this.search_exist_tasks(this.c_tasks, new_task)
 
-          if(this.c_tasks[i].task == task_parent){
+        if(check_task){
+          this.notification = new Object()
+          this.notification.error = "Task já existe!"
+        }else{
+
+          for(let i = 0; i < this.c_tasks.length; i++){
+
+            if(this.c_tasks[i].task == task_parent){
+
+              if(this.c_tasks[i].children){
+                this.c_tasks[i].children.push({'task': new_task, 'concluded': false, 'task_parent': task_parent })
+              }else{
+                this.c_tasks[i].children = Object.assign([{'task': new_task, 'concluded': false, 'task_parent': task_parent }])
+              }
+            }
 
             if(this.c_tasks[i].children){
-              this.c_tasks[i].children.push({'task': new_task, 'concluded': false, 'task_parent': task_parent })
-            }else{
-              this.c_tasks[i].children = Object.assign([{'task': new_task, 'concluded': false, 'task_parent': task_parent }])
+              this.search_tree_add(new_task, task_parent, this.c_tasks[i].children)
             }
           }
 
-          if(this.c_tasks[i].children){
-            this.search_tree_add(new_task, task_parent, this.c_tasks[i].children)
-          }
         }
       },
 
@@ -183,6 +207,27 @@
             this.search_tree_add(new_task, task_parent, children[i].children)
           }
         }
+
+      },
+
+      search_exist_tasks(all_tasks, search_task){
+
+        var task = false
+        for(let i = 0; i < all_tasks.length; i++){
+
+          if(all_tasks[i].task == search_task){
+            task = true
+          }
+
+          if(task != true){
+            if(all_tasks[i].children){
+              task = this.search_exist_tasks(all_tasks[i].children, search_task)
+            }
+          }
+
+        }
+
+        return task
 
       },
 
@@ -262,6 +307,8 @@
           }
 
           this.comparation_tree_tasks()
+
+          this.show_modal = !this.show_modal
         }
 
       },

@@ -20,7 +20,6 @@
           <button @click="show_add = !show_add" type="button" class="btn btn-primary">Add</button>
           <button @click="show_edit = !show_edit; show_task_edit(node.task)" type="button" class="btn btn-secondary">Editar</button>
           <button @click="del_task(node.task)" type="button" class="btn btn-danger">Delete</button>
-    <!--      <button @click="show_modal = !show_modal" type="button" class="btn btn-danger">Delete</button> -->
         </div>
       
       </div>
@@ -47,8 +46,6 @@
       </div>
     </div>
 
-   <Modal v-if="show_modal" @close="show_modal = false" :task="node"/>
-
   </li>
   <div v-if="expanded">
       
@@ -66,7 +63,6 @@
 <script>
   
   import Axios from '@/api/api.js';
-  import Modal from '@/components/ModalComponent.vue'
 
   export default {
     name: 'ChildTasksComponent',
@@ -86,7 +82,6 @@
         expanded: false,
         show_add: false,
         show_edit: false,
-        show_modal: false,
       }
     },
     async created(){
@@ -120,9 +115,6 @@
       }
 
     },
-    components: {
-      Modal,
-    },
     computed: {
       hasChildren(){
         return this.node.children
@@ -143,16 +135,7 @@
         }
 
       },
-
-      reload_component(){
-
-        if(this.depth == 0){
-          this.$parent.load_tasks()
-        }else{
-          this.$parent.reload_component()
-        }
-      },
-
+      
       add_task(new_task, task_parent){
 
         if(this.depth == 0){
