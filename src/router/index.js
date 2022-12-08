@@ -12,6 +12,11 @@ import TasksView from '../views/tasks/TasksView.vue'
 const routes = [
   {
     path: '/',
+    name: '/',
+    component: HomeView
+  },
+  {
+    path: '/home',
     name: 'home',
     component: HomeView
   },

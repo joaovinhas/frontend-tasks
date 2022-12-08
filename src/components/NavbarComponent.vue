@@ -22,17 +22,15 @@
             <li class="nav-item">
               <router-link v-if="!username" to="/login" class="nav-link" >Login</router-link>
 
-              
-              <div v-if="username" class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <div v-if="username" class="btn-group nav-item menu-navbar">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   {{username}}
                 </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <ul class="dropdown-menu">
                   <li><router-link to="/dashboard" class="dropdown-item" >Dashboard</router-link></li>
                   <li><button @click="logout()" class="dropdown-item" >Sair</button></li>
                 </ul>
               </div>
-
 
             </li>
           </ul>
@@ -105,5 +103,13 @@
 </script>
 
 <style lang="scss" scoped>
+
+@media only screen and (min-width: 990px){
+  .menu-navbar{
+    .dropdown-toggle{
+      margin-left:100px;
+    }
+  }
+}
 
 </style>

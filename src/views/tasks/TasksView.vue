@@ -364,10 +364,6 @@
 
         }
 
-        console.log(this.new_tasks)
-        console.log(this.edited_tasks)
-        console.log(this.del_tasks)
-
         this.save_tasks_api()
 
         this.new_tasks = ""
@@ -526,7 +522,7 @@
         if(this.del_tasks.length){
 
           for(let i = 0; i < this.del_tasks.length; i ++){
-            response = await Axios.del_task(this.token, this.del_tasks[i].id)
+            response = Axios.del_task(this.token, this.del_tasks[i].id)
           }
 
         }
@@ -595,18 +591,18 @@
           
           var response = await Axios.search_task(this.token, this.type, this.search)
 
-          if(response.root_tasks){
-            if(response.root_tasks.length != 0){
-              
-              this.tasks = response
 
-              this.childtasks()
+          if(response.root_tasks.length != 0){
+            
+            this.tasks = response
 
+            if(response.child_tasks.length != 0){
+              this.tasks = this.childtasks(this.tasks.root_tasks, this.tasks.child_tasks)
+              this.c_tasks = this.tasks
+            }else{
               this.c_tasks = this.tasks.root_tasks
             }
-  
-          }else{
-            this.tasks.root_tasks = false
+
           }
 
         }else{

@@ -1,6 +1,7 @@
 <template>
   <footer>
-    <h1>Footer</h1>
+    <p><router-link to="/about">Sobre</router-link></p>
+    <p><a href="https://twitter.com/joaovitorvinhas">Twitter</a></p>
   </footer>
 </template>
 

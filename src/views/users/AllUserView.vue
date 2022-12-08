@@ -135,8 +135,8 @@
       async search_task(){
 
         var response = await Axios.search_user(this.token, this.type, this.search)
-        
-        if(response.users){
+
+        if(response.users.length){
           this.users = response.users
         }else{
           this.notification = new Object()
