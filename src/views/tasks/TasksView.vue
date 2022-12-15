@@ -24,7 +24,7 @@
         </select>     
         <div class="input-group-append">
           <button @click="search_task()" class="btn btn-outline-primary" type="button">Buscar</button>
-          <button @click="show_search = !show_search; load_tasks()" class="btn btn-outline-danger" type="button">Voltar</button>
+          <button @click="show_search = !show_search; load_search_tasks()" class="btn btn-outline-danger" type="button">Voltar</button>
         </div>
       </div>
 
@@ -78,6 +78,7 @@
         show_search:"",
         type:"task",
         search:"",
+        save_search:"",
         notification:'',
         show_modal:false,
       }
@@ -653,6 +654,7 @@
           
           var response = await Axios.search_task(this.token, this.type, this.search)
 
+          this.save_searchs(this.c_tasks)
 
           if(response.root_tasks.length != 0){
             
@@ -671,6 +673,14 @@
           this.notification = new Object()
           this.notification.error = "Valor Inválido!"
         }
+      },
+
+      save_searchs(c_tasks){
+        this.save_search = c_tasks
+      },
+
+      load_search_tasks(){
+        this.c_tasks = this.save_search
       },
 
     },
