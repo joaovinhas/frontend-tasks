@@ -152,7 +152,11 @@
             this.notification = new Object()
             this.notification.error = "Task já existe!"
           }else{
-            this.c_tasks.push({'task': this.new_task, 'concluded': false, 'task_parent': 'null' })
+            if(this.c_tasks == ""){
+              this.c_tasks = [{'task': this.new_task, 'concluded': false, 'task_parent': 'null' }]
+            }else{
+              this.c_tasks.push({'task': this.new_task, 'concluded': false, 'task_parent': 'null' })
+            }
             this.new_task = ""
           }
 
@@ -309,6 +313,17 @@
           this.comparation_tree_tasks()
 
           this.show_modal = !this.show_modal
+
+        }else{
+
+          this.comparation_tree_children(this.c_tasks, null)
+
+          this.save_tasks_api()
+
+          this.new_tasks = ""
+
+          this.show_modal = !this.show_modal
+
         }
 
       },

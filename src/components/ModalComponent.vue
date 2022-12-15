@@ -12,7 +12,7 @@
             </button>
           </div>
           <div class="modal-body">
-            Tem certeza que desaja salvar as alterações!.<br/>
+            Tem certeza que desaja salvar as alterações!<br/>
             As tasks apagadas não terão como ser recuperadas!
           </div>
           <div class="modal-footer">

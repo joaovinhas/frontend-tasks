@@ -90,7 +90,7 @@
 
               var response = await Axios.register(this.username, this.email, this.password, this.confirm_password)
 
-              if(response.email[0]){
+              if(response.email){
                 this.notification = new Object()
                 this.notification.error = "Esse email já esta cadastrado!"
                 

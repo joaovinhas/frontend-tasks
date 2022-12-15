@@ -10,8 +10,11 @@
           <li class="nav-item">
             <router-link to="/" class="nav-link active" aria-current="page">Home</router-link>
           </li>
-          <li class="nav-item">
-            
+          <li v-if="username" class="nav-item">
+            <router-link to="/dashboard" class="nav-link">Dashboard</router-link>
+          </li>
+          <li v-if="username" class="nav-item">
+            <router-link to="/tasks" class="nav-link">Minhas Tasks</router-link>
           </li>
           <li class="nav-item">
             <router-link to="/about" class="nav-link">Sobre</router-link>
@@ -28,7 +31,12 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li><router-link to="/dashboard" class="dropdown-item" >Dashboard</router-link></li>
-                  <li><button @click="logout()" class="dropdown-item" >Sair</button></li>
+                  <li><router-link to="/tasks" class="dropdown-item" >Minhas tasks</router-link></li>
+                  <li>
+                    <div class="dropdown-item">
+                      <button @click="logout()" class="btn btn-danger" >Sair</button>
+                    </div>
+                  </li>
                 </ul>
               </div>
 
