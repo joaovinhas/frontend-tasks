@@ -36,7 +36,7 @@
         </div>
       </div>
 
-      <div v-if="c_tasks">
+      <div v-if="c_tasks && c_tasks.length">
         <ChildTasks
           v-for="(child, index) in c_tasks" :key="index"
           :tasks="child"
