@@ -6,7 +6,7 @@
       <Modal v-if="show_modal" @close="show_modal = false"/>
       <Notification v-if="notification" :message="notification"/>
 
-      <h1>Suas Tasks Aqui! <button @click="show_modal = !show_modal" type="button" class="btn btn-primary">Salvar Alterações</button></h1><br/>
+      <h1>Suas Tasks Aqui! <button v-if="!show_search" @click="show_modal = !show_modal" type="button" class="btn btn-primary">Salvar Alterações</button></h1><br/>
 
       <!--Busca usuarios-->
 
@@ -680,7 +680,9 @@
       },
 
       load_search_tasks(){
-        this.c_tasks = this.save_search
+        if(this.save_search){
+          this.c_tasks = this.save_search
+        }
       },
 
     },
